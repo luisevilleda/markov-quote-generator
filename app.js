@@ -2,7 +2,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var Url = require('url');
 var validation = require('./utils/validation');
-var session = require('express-session');
 var dataCollection = require('./utils/dataCollection');
 var MarkovChain = require('markovchain');
 
@@ -12,12 +11,6 @@ var app = express();
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
-}));
 //End Middleware
 
 //Routes
