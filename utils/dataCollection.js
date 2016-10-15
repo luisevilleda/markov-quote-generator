@@ -15,6 +15,10 @@ module.exports = {
 
   collectQuotes: function(person, quote) {
     fs.appendFileSync('data/' + person + '/quotes.txt', ' ' + quote);
+  },
+
+  readTxt: function(person) {
+    return fs.readFileSync('data/' + person + '/quotes.txt', 'utf8');
   }
 
 

@@ -1,0 +1,21 @@
+{
+  "name": "markov",
+  "description": "Markov chains",
+  "main": "app.js",
+  "authors": [
+    "Luis Villeda"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/luisevilleda/markov-quote-generator",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}

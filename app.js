@@ -1,11 +1,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var MarkovChain = require('markovchain');
 var Url = require('url');
 var validation = require('./utils/validation');
-var session = require('express-session')
-
+var session = require('express-session');
 var dataCollection = require('./utils/dataCollection');
+var MarkovChain = require('markovchain');
 
 var app = express();
 
@@ -59,12 +58,13 @@ app.get('/generate', function(req, res) {
   });
 });
 
-// app.post('/generate', function(req, res) {
-//   var person = validation.getPostParam(req.url);
-//   console.log(people[currentPerson]);
-//   // res.send( people[currentPerson].quotes.start('This').end(15).process() );
-//   res.send( JSON.stringify(people[currentPerson].quotes) );
-// });
+app.get('/data/*', function(req, res) {
+  var person = validation.getGeneratorPerson(req.url);
+  var data = dataCollection.readTxt(person);
+  var quoteGen = new MarkovChain(data);
+  var quote = quoteGen.start('The').end(5).process();
+  res.send( quote );
+});
 
 
 app.listen(3000);

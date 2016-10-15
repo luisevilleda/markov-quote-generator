@@ -20,7 +20,12 @@ module.exports = {
     } else {
       return null;
     }
+  },
 
+  getGeneratorPerson: function(url) {
+    var urlObj = Url.parse(url, true);
+    var person = decodeURI(urlObj.pathname.slice(6));
+    return person;
   }
 
 
