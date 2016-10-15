@@ -1,18 +1,24 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var MarkovChain = require('markovchain');
+var Url = require('url');
+var validation = require('./utils/validation');
+var session = require('express-session')
+
+var dataCollection = require('./utils/dataCollection');
 
 var app = express();
-
-//Global variable for name and text
-  //TODO: put in database
-var people = {};
-var currentPerson;
 
 //Middleware
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 //End Middleware
 
 //Routes
@@ -21,36 +27,44 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', function(req, res) {
-  person = req.body.person.toLowerCase();
-  currentPerson = person;
+  var person = req.body.person.toLowerCase();
+  dataCollection.collectName(person);
 
-  if (!people.hasOwnProperty(person)) {
-    people[person] = {text: ''};
-  }
-  res.redirect('/quotes');
+  res.redirect('/quotes?person=' + person);
 });
 
 app.get('/quotes', function(req, res) {
-  res.sendfile('quotes.html', {root: './public'});
+  validation.urlParam(req.query, function(err, person) {
+    if (err) {
+      res.redirect('/');
+    } else {
+      res.sendFile('quotes.html', {root: './public'});
+    }
+  });
 });
 
 app.post('/quotes', function(req, res) {
-  people[currentPerson].text += ' ' + req.body.quote;
-  console.log(people[currentPerson].text);
+  var person = validation.getPostParam(req.url);
+  dataCollection.collectQuotes(person, req.body.quote);
+  res.redirect('/quotes?person=' + person);
 });
 
 app.get('/generate', function(req, res) {
-  console.log('person: ', person[currentPerson]);
-  res.sendfile('generate.html', {root: './public'});
-  people[currentPerson].quotes = new MarkovChain(people[currentPerson].text);
-  console.log(people[currentPerson].quotes);
+  validation.urlParam(req.query, function(err, person) {
+    if (err) {
+      res.redirect('/');
+    } else {
+      res.sendFile('generate.html', {root: './public'});
+    }
+  });
 });
 
-app.post('/generate', function(req, res) {
-  console.log(people[currentPerson]);
-  // res.send( people[currentPerson].quotes.start('This').end(15).process() );
-  res.send( JSON.stringify(people[currentPerson].quotes) );
-});
+// app.post('/generate', function(req, res) {
+//   var person = validation.getPostParam(req.url);
+//   console.log(people[currentPerson]);
+//   // res.send( people[currentPerson].quotes.start('This').end(15).process() );
+//   res.send( JSON.stringify(people[currentPerson].quotes) );
+// });
 
 
 app.listen(3000);
