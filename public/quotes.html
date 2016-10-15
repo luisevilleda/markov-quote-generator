@@ -7,16 +7,16 @@
   </head>
 
   <body>
-    <form action='/quotes' method='POST'>
-      Keep submitting quotes here: <br />
-      <input type='text' name='quote'>
-      <input type='submit' value='submit'>
-    </form>
+    
     <br />
     <a id='finish' href='/generate'>When you finish, 
       click here to start generating phrases!</a>
+      
   </body>
 
+  <script src='lib/jquery/dist/jquery.min.js'></script>
+  <script src='lib/bootstrap/dist/js/bootstrap.min.js'></script>
+  <link href='lib/bootstrap/dist/css/bootstrap.min.css' rel="stylesheet" type="text/css">
   <script type="text/javascript">
     var person = window.location.search.slice(8);
     document.getElementsByTagName('form')[0]

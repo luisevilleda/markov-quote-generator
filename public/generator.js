@@ -8,11 +8,11 @@ $( document ).ready(function() {
   var $layout = $(
     `<h1>Generate phrases ${decodeURI(person)} would totally say!</h1>
     <button id='generate'>Generate</button>
+    <input name='start'></input>
     <div class='quotes'></div>`
   );
 
   $body.append($layout);
-
 
   $('#generate').click(function(e) {
     $.get( 'data/' + person, function(data) {

@@ -19,8 +19,13 @@ module.exports = {
 
   readTxt: function(person) {
     return fs.readFileSync('data/' + person + '/quotes.txt', 'utf8');
+  },
+
+  useUpperCase: function(wordList) {
+    var tmpList = Object.keys(wordList).filter(function(word) {
+      return word[0] >= 'A' && word[0] <= 'Z';
+    });
+    return tmpList[ Math.floor((Math.random()*tmpList.length)) ];
   }
-
-
 
 };
